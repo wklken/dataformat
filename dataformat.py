@@ -27,7 +27,8 @@ def one_line_format(parts, total, ft_map, output_separators, empty_fill_str, is_
                 #列默认值暂不开启时间戳处理
                 outline.append(fill_index[1:])
             else:
-                outline.append(handler_specal_part(parts[int(fill_index) - 1]))
+                # outline.append(handler_specal_part(parts[int(fill_index) - 1]))
+                outline.append(parts[int(fill_index) - 1])
         else:
             #-s 选项生效，则填充列号, 否则，填充默认填充值
             column = str(index) if is_fill_with_column_no else empty_fill_str
@@ -127,53 +128,53 @@ def process(input_file, total, rules, outpath, input_separators, outsp, empty_fi
     input_file.close()
 
 
-#特殊的处理入口，处理维度为每一行,目前只有时间处理
-def handler_specal_part(part_str):
-    #timestamp 时间处理
-    #时间列，默认必须 TS数字=时间
-    if part_str.startswith("TS") and "=" in part_str:
-        ts_format = {
-            8: "%Y%m%d",
-            10: "%Y-%m-%d",
-            14: "%Y%m%d%H%M%S",
-            19: "%Y-%m-%d %H:%M:%S"
-        }
-        to_l = 0
-        #step1 确认输出的格式 TS8 TS10 TS14 TS19
-        if part_str[2] != "=":
-            to_l = int(part_str[2:part_str.index("=")])
+# #特殊的处理入口，处理维度为每一行,目前只有时间处理
+# def handler_specal_part(part_str):
+    # #timestamp 时间处理
+    # #时间列，默认必须 TS数字=时间
+    # if part_str.startswith("TS") and "=" in part_str:
+        # ts_format = {
+            # 8: "%Y%m%d",
+            # 10: "%Y-%m-%d",
+            # 14: "%Y%m%d%H%M%S",
+            # 19: "%Y-%m-%d %H:%M:%S"
+        # }
+        # to_l = 0
+        # #step1 确认输出的格式 TS8 TS10 TS14 TS19
+        # if part_str[2] != "=":
+            # to_l = int(part_str[2:part_str.index("=")])
 
-        part_str = part_str.split("=")[1].strip()
-        interval = 0
-        #step2 存在时间+-的情况 确认加减区间
-        if "+" in part_str:
-            inputdate = part_str.split("+")[0].strip()
-            interval = int(part_str.split("+")[1].strip())
-        elif "-" in part_str:
-            parts = part_str.split("-")
-            #20101020 - XX
-            if len(parts) == 2:
-                inputdate = parts[0].strip()
-                interval = -int(parts[1].strip())
-            #2010-10-20
-            elif len(parts) == 3:
-                inputdate = part_str
-            #2010-10-20 - XX
-            elif len(parts) == 4:
-                inputdate = "-".join(parts[:-1])
-                interval = -int(parts[-1])
-            else:
-                inputdate = part_str
-        else:
-            inputdate = part_str.strip()
-        #step3 将原始时间转为目标时间
-        part_str = get_timestamp(inputdate, ts_format, interval)
+        # part_str = part_str.split("=")[1].strip()
+        # interval = 0
+        # #step2 存在时间+-的情况 确认加减区间
+        # if "+" in part_str:
+            # inputdate = part_str.split("+")[0].strip()
+            # interval = int(part_str.split("+")[1].strip())
+        # elif "-" in part_str:
+            # parts = part_str.split("-")
+            # #20101020 - XX
+            # if len(parts) == 2:
+                # inputdate = parts[0].strip()
+                # interval = -int(parts[1].strip())
+            # #2010-10-20
+            # elif len(parts) == 3:
+                # inputdate = part_str
+            # #2010-10-20 - XX
+            # elif len(parts) == 4:
+                # inputdate = "-".join(parts[:-1])
+                # interval = -int(parts[-1])
+            # else:
+                # inputdate = part_str
+        # else:
+            # inputdate = part_str.strip()
+        # #step3 将原始时间转为目标时间
+        # part_str = get_timestamp(inputdate, ts_format, interval)
 
-        #step4 如果定义了输出格式，转换成目标格式，返回
-        if to_l > 0:
-            part_str = time.strftime(ts_format.get(to_l),
-                                     time.localtime(int(part_str)))
-    return part_str
+        # #step4 如果定义了输出格式，转换成目标格式，返回
+        # if to_l > 0:
+            # part_str = time.strftime(ts_format.get(to_l),
+                                     # time.localtime(int(part_str)))
+    # return part_str
 
 
 #将时间由秒转化为目标格式
