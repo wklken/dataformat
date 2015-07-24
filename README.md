@@ -1,5 +1,8 @@
 # dataformat
+
 A tool to generate data or reformat source data to csv/xml, useful for test data
+
+> target: 更方便地造数据, 最好的造数据工具(handy for test data generate)
 
 ### help msg
 
@@ -68,6 +71,14 @@ B1/B2/B3/B4/-/-/-/-/-/-
 
 #### 5. column 10 with default value 'D10'
 
+default syntax
+```
+column_index=default_value
+10=D10
+```
+
+e.g.
+
 ```
 ./dataformat.py -i data -t 10 -F ',' -P '/' -a "1,2,3,4,10=D10" -f '-'
 
@@ -77,6 +88,13 @@ B1/B2/B3/B4/-/-/-/-/-/D10
 ```
 
 #### 6. switch column 1 and column 2
+
+map syntax
+```
+target_column_index:source_coulmn_index
+1:2
+means source file column 2 put into target file column 1 (2=>1)
+```
 
 use map
 ```
@@ -92,10 +110,15 @@ equals:
 ./dataformat.py -i data -t 10 -F ',' -P '/' -a "1:2,2:1,3:3,4:4,10=D10" -f '-'
 ```
 
-#### 7. to be continue
+#### 7. multi OFS(output field separator)
 
+```
+./dataformat.py -i data -t 10 -F ',' -P '0=/,1=-' -a "1:2,2:2,3:3,4:4,9:4,10=D10" -f '-'
 
-
+# cat data.dist
+A2-A2/A3/A4/-/-/-/-/A4/D10
+B2-B2/B3/B4/-/-/-/-/B4/D10
+```
 
 
 ### update log
@@ -112,23 +135,30 @@ equals:
 2015-07-19 version 1.0 do a lot of changes
 ```
 
-# DONE
-1. 使用argparse, 重构命令行
-2. 重构help message
-3. 重构文件读取及处理, 大文件的处理方法
-11. add readme
+### todo list
 
-# TODO:
-target: 更方便地造数据, 最好的造数据工具
-0. 复盘, 写重构要点
-4. 修改日期生成方式, 要更友好, 支持多种方式timestamp or str
-5. 支持json/csv/tab等任意字符分隔/xml
-6. 整数/小数/随机数/限制精度
-7. 支持python2.4/2.5/2.6/2.7/3.x
-8. 乱序/默认/填充值等
-9. 找到原来的博客 http://www.jiancool.com/article/72353002070/ => 思考功能, 提供README.md
-   http://wklken.me/posts/2011/12/10/python-dataformat.html
-10. add testcase
-12. 实现这个
-./dataformat.py -i data -t 10 -F ',' -P '/' -a "1:2,2:1,3,4,9:1,10=D10" -f '-'
-13. 处理异常, 莫名其妙没结果的
+```
+1. support field specific date generate: ts/YMD
+2. support column process python function:  1:round(#2)+#3
+3. output csv/xml/json?
+4. support python2.6/2.7/3.x
+5. processing infomation, and exception
+6. add testcase
+
+```
+
+### Donation
+
+You can Buy me a coffee:)  [link](http://www.wklken.me/pages/donation.html)
+
+------------------------
+------------------------
+
+wklken
+
+Email: wklken@yeah.net
+
+Github: https://github.com/wklken
+
+Blog: [http://www.wklken.me](http://www.wklken.me)
+
